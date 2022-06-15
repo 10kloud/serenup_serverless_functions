@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  serenup_serverless_functions
+
+  Sample SAM Template for serenup_serverless_functions
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Parameters:
+  KinesisStream:
+    Type: String
+    Description: ARN of the Amazon Kinesis Stream
+  TimestreamDatabase:
+    Type: String
+    Description: Name of the timestream db that stores bracelet data
+  TimestreamTableName:
+    Type: String
+    Description: Name of the timestream db table that stores bracelet data
+
+Resources:
+  BraceletSensorsTimestreamWriter:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      CodeUri: bracelet_sensors_timestream_writer/
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          TIMESTREAM_DB: !Ref TimestreamDatabase
+          TABLE_NAME: !Ref TimestreamTableName
+      Events:
+        NewBraceletDataInShard:
+          Type: Kinesis
+          Properties:
+            Stream: !Ref KinesisStream
+            StartingPosition: LATEST

@@ -1,0 +1,21 @@
+{
+  "Records": [
+    {
+      "kinesis": {
+        "kinesisSchemaVersion": "0.0",
+        "partitionKey": "d3d8791e-1222-45b8-835e-95c19dc2f0f8",
+        "sequenceNumber": "49630443647588401742333640497104245451105989382866206786",
+        "data": "eyJkZXZpY2VfaWQiOiAiZDNkODc5MWUtMTIyMi00NWI4LTgzNWUtOTVjMTlkYzJmMGY4IiwgImN1c3RvbWVyX2lkIjogIjcyN2I3ZjE3LWM2YTItNDEwNi1iZDhkLWRhY2RkM2U2NWM2YiIsICJ0aW1lIjogIjIwMjItMDYtMTRUMjI6Mjk6MzYuNTI3MjMzKzAwOjAwIiwgInNlcmVuZGlwaXR5IjogMTQuNTY0NzI2MjUzNjM4MTM4fQ==",
+        "approximateArrivalTimestamp": 1655245776.553
+      },
+      "eventSource": "aws:kinesis",
+      "eventVersion": "1.0",
+      "eventID": "shardId-000000000004:49630443647588401742333640497104245451105989382866206786",
+      "eventName": "aws:kinesis:record",
+      "invokeIdentityArn": "arn:aws:iam::240595528763:role/clod2021-g5pw-serenup-ser-BraceletSensorsTimestrea-2JT7PAD4KOUM",
+      "awsRegion": "eu-west-1",
+      "eventSourceARN": "arn:aws:kinesis:eu-west-1:240595528763:stream/clod_group5_serenup-smartbracelet-ingester"
+    }
+  ]
+}
+
