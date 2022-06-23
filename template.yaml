@@ -30,13 +30,18 @@ Resources:
       CodeUri: bracelet_sensors_timestream_writer/
       Architectures:
         - x86_64
+      Policies:
+        - AmazonTimestreamFullAccess
       Environment:
         Variables:
           TIMESTREAM_DB: !Ref TimestreamDatabase
-          TABLE_NAME: !Ref TimestreamTableName
+          TIMESTREAM_TABLE: !Ref TimestreamTableName
       Events:
         NewBraceletDataInShard:
           Type: Kinesis
           Properties:
             Stream: !Ref KinesisStream
             StartingPosition: LATEST
+            MaximumRetryAttempts: 1
+            BatchSize: 100
+            MaximumBatchingWindowInSeconds: 2
