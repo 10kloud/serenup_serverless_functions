@@ -45,3 +45,21 @@ Resources:
             MaximumRetryAttempts: 1
             BatchSize: 100
             MaximumBatchingWindowInSeconds: 2
+  GetBraceletByCustomer:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: get_bracelets_by_customer/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Policies:
+        - AmazonTimestreamFullAccess
+      Environment:
+        Variables:
+          TIMESTREAM_DB: !Ref TimestreamDatabase
+          TIMESTREAM_TABLE: !Ref TimestreamTableName
+      Events:
+        GetMetricsForUser:
+          Type: Api
+          Properties:
+            Method: GET
+            Path: /users/{customer_id}/bracelets
