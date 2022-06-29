@@ -1,5 +1,3 @@
-import sys
-
 import boto3
 import json
 import os
@@ -26,6 +24,8 @@ def lambda_handler(event: dict, context):
                 message="Customer not found"
             ))
         )
+
+    print(f"Requested bracelets owned by {customer_id}")
 
     query = build_query(customer_id)
 
