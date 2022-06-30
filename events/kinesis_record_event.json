@@ -3,14 +3,14 @@
     {
       "kinesis": {
         "kinesisSchemaVersion": "1.0",
-        "partitionKey": "b48963d8-0957-4519-8e7e-bba1159c408b",
-        "sequenceNumber": "49630706107355620004684662665438408227461707292729147442",
-        "data": "eyJkZXZpY2VfaWQiOiAiYjQ4OTYzZDgtMDk1Ny00NTE5LThlN2UtYmJhMTE1OWM0MDhiIiwgImN1c3RvbWVyX2lkIjogIjJmMTFiMjQ1LTdjNGUtNDVmZS04MjhlLWRiNDhmYzQ0YjIyMyIsICJtZWFzdXJlZF9hdCI6IDE2NTU5MTI0ODk0NDU5MTI3ODMsICJzZXJlbmRpcGl0eSI6IDEzLjQ0ODU5ODg0MDMxODk3NiwgImJhdHRlcnlfbGV2ZWwiOiAxMy43NTE3MjU1MTYxMjc4OTF9",
-        "approximateArrivalTimestamp": 1655912489.491
+        "partitionKey": "c8054756-9ea3-485e-ad83-c7944e6b3729",
+        "sequenceNumber": "49630729151295453021539429466195986298285933326682292242",
+        "data": "eyJkZXZpY2VfaWQiOiAiYzgwNTQ3NTYtOWVhMy00ODVlLWFkODMtYzc5NDRlNmIzNzI5IiwgImN1c3RvbWVyX2lkIjogImFiMjZmMTYyLTQ4OTEtNDllYS1hOWUyLTAzMzgzMzJmNjgwNSIsICJtZWFzdXJlZF9hdCI6IDE2NTY0OTU4Nzg4MjM1Nzg3MjYsICJzZXJlbmRpcGl0eSI6IDcuNDY4MDQxODI1Mzc3NTQ1LCAiYmF0dGVyeV9sZXZlbCI6IDE1Ni45MjI5Mjc1OTczMjA2N30=",
+        "approximateArrivalTimestamp": 1656495878.844
       },
       "eventSource": "aws:kinesis",
       "eventVersion": "1.0",
-      "eventID": "shardId-000000000003:49630706107355620004684662665438408227461707292729147442",
+      "eventID": "shardId-000000000001:49630729151295453021539429466195986298285933326682292242",
       "eventName": "aws:kinesis:record",
       "invokeIdentityArn": "arn:aws:iam::240595528763:role/clod2021-g5pw-serenup-ser-BraceletSensorsTimestrea-1W4NMMOOL0P6R",
       "awsRegion": "eu-west-1",
@@ -19,14 +19,14 @@
     {
       "kinesis": {
         "kinesisSchemaVersion": "1.0",
-        "partitionKey": "b48963d8-0957-4519-8e7e-bba1159c408b",
-        "sequenceNumber": "49630706107355620004684662665444452856559780507322155058",
-        "data": "eyJkZXZpY2VfaWQiOiAiYjQ4OTYzZDgtMDk1Ny00NTE5LThlN2UtYmJhMTE1OWM0MDhiIiwgImN1c3RvbWVyX2lkIjogIjJmMTFiMjQ1LTdjNGUtNDVmZS04MjhlLWRiNDhmYzQ0YjIyMyIsICJtZWFzdXJlZF9hdCI6IDE2NTU5MTI0OTA1MTc5NDE2MTEsICJzZXJlbmRpcGl0eSI6IDE0LjkwOTczMjMzNzA2OTI5NywgImJhdHRlcnlfbGV2ZWwiOiAxMy43NTE3MjU1MTYxMjc4OTF9",
-        "approximateArrivalTimestamp": 1655912490.547
+        "partitionKey": "c8054756-9ea3-485e-ad83-c7944e6b3729",
+        "sequenceNumber": "49630729151295453021539429466232254072874372270642954258",
+        "data": "eyJkZXZpY2VfaWQiOiAiYzgwNTQ3NTYtOWVhMy00ODVlLWFkODMtYzc5NDRlNmIzNzI5IiwgImN1c3RvbWVyX2lkIjogImFiMjZmMTYyLTQ4OTEtNDllYS1hOWUyLTAzMzgzMzJmNjgwNSIsICJtZWFzdXJlZF9hdCI6IDE2NTY0OTU4Nzk4NzY1OTMxMzYsICJzZXJlbmRpcGl0eSI6IDUuMDAzOTU5ODI5NDY0Njg2LCAiYmF0dGVyeV9sZXZlbCI6IDE1Ni45MjI5Mjc1OTczMjA2N30=",
+        "approximateArrivalTimestamp": 1656495879.896
       },
       "eventSource": "aws:kinesis",
       "eventVersion": "1.0",
-      "eventID": "shardId-000000000003:49630706107355620004684662665444452856559780507322155058",
+      "eventID": "shardId-000000000001:49630729151295453021539429466232254072874372270642954258",
       "eventName": "aws:kinesis:record",
       "invokeIdentityArn": "arn:aws:iam::240595528763:role/clod2021-g5pw-serenup-ser-BraceletSensorsTimestrea-1W4NMMOOL0P6R",
       "awsRegion": "eu-west-1",
