@@ -63,6 +63,13 @@ Resources:
           Properties:
             Method: GET
             Path: /bracelets/{bracelet_id}
+            RequestParameters:
+              - method.request.querystring.metric:
+                  Required: false
+                  Caching: false
+              - method.request.querystring.from:
+                  Required: false
+                  Caching: false
   GetBraceletByCustomer:
     Type: AWS::Serverless::Function
     Properties:
