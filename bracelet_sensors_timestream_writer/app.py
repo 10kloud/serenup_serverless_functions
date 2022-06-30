@@ -1,8 +1,10 @@
 import base64
 import json
-import boto3
 import os
 from typing import List, Dict
+
+import boto3
+
 from bracelet import BraceletMetric
 
 timestream = boto3.client('timestream-write')
@@ -26,7 +28,6 @@ def extract_bracelet_metrics(event: Dict[str, List]) -> List[BraceletMetric]:
 def save_bracelet_metrics(metrics: List[BraceletMetric]):
     for metric in metrics:
         dimensions = [
-            {'Name': 'region', 'Value': 'eu-west-1'},
             {'Name': 'bracelet_id', 'Value': metric.device_id},
             {'Name': 'customer_id', 'Value': metric.customer_id}
         ]
@@ -35,40 +36,20 @@ def save_bracelet_metrics(metrics: List[BraceletMetric]):
             TimeUnit="NANOSECONDS",
             Dimensions=dimensions,
         )
-        # ID of the bracelet
-        device_id = dict(
-            MeasureName="device_id",
-            MeasureValue=str(metric.device_id),
-            MeasureValueType='VARCHAR',
-        )
-        # ID of the customer/user
-        customer_id = dict(
-            MeasureName="customer_id",
-            MeasureValue=str(metric.customer_id),
-            MeasureValueType='VARCHAR',
-        )
         # Serendipity level of the user
         serendipity = dict(
             MeasureName="serendipity",
-            MeasureValue=str(metric.serendipity),
+            MeasureValue=str(round(metric.serendipity, 2)),
             MeasureValueType="DOUBLE"
         )
         # Battery level of the device
         battery_level = dict(
             MeasureName="battery_level",
-            MeasureValue=str(metric.battery_level),
+            MeasureValue=str(round(metric.battery_level, 2)),
             MeasureValueType="DOUBLE"
         )
-        # When the measurement has been done
-        measurement_time = dict(
-            MeasureName="measured_at",
-            MeasureValue=str(metric.measured_at),
-            MeasureValueType="VARCHAR"
-        )
         records = [
-            device_id, customer_id,
-            serendipity, battery_level,
-            measurement_time
+            serendipity, battery_level
         ]
 
         timestream_write(records, common_attributes)
