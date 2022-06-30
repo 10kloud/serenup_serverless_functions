@@ -1,0 +1,66 @@
+{
+  "body": null,
+  "headers": {
+    "Accept": "*/*",
+    "Host": "localhost:3000",
+    "User-Agent": "curl/7.84.0",
+    "X-Forwarded-Port": "3000",
+    "X-Forwarded-Proto": "http"
+  },
+  "httpMethod": "GET",
+  "isBase64Encoded": false,
+  "multiValueHeaders": {
+    "Accept": [
+      "*/*"
+    ],
+    "Host": [
+      "localhost:3000"
+    ],
+    "User-Agent": [
+      "curl/7.84.0"
+    ],
+    "X-Forwarded-Port": [
+      "3000"
+    ],
+    "X-Forwarded-Proto": [
+      "http"
+    ]
+  },
+  "multiValueQueryStringParameters": null,
+  "path": "/bracelets/bracelet_id/",
+  "pathParameters": {
+    "bracelet_id": "bracelet_id"
+  },
+  "queryStringParameters": {
+  },
+  "requestContext": {
+    "accountId": "123456789012",
+    "apiId": "1234567890",
+    "domainName": "localhost:3000",
+    "extendedRequestId": null,
+    "httpMethod": "GET",
+    "identity": {
+      "accountId": null,
+      "apiKey": null,
+      "caller": null,
+      "cognitoAuthenticationProvider": null,
+      "cognitoAuthenticationType": null,
+      "cognitoIdentityPoolId": null,
+      "sourceIp": "127.0.0.1",
+      "user": null,
+      "userAgent": "Custom User Agent String",
+      "userArn": null
+    },
+    "path": "/bracelets/{bracelet_id}",
+    "protocol": "HTTP/1.1",
+    "requestId": "d1336922-57f9-4805-930e-e9f173d3bd1a",
+    "requestTime": "30/Jun/2022:07:56:33 +0000",
+    "requestTimeEpoch": 1656575793,
+    "resourceId": "123456",
+    "resourcePath": "/bracelets/{bracelet_id}",
+    "stage": "Prod"
+  },
+  "resource": "/bracelets/{bracelet_id}",
+  "stageVariables": null,
+  "version": "1.0"
+}
