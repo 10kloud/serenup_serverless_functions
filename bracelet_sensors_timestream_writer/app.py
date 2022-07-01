@@ -63,12 +63,13 @@ def save_bracelet_metrics(metrics: List[BraceletMetric]):
 
 def timestream_write(records: List[dict], common_attributes: dict):
     try:
-        timestream.write_records(
+        result = timestream.write_records(
             DatabaseName=os.getenv("TIMESTREAM_DB"),
             TableName=os.getenv("TIMESTREAM_TABLE"),
             Records=records,
             CommonAttributes=common_attributes
         )
+        print("WriteRecords Status: [%s]" % result['ResponseMetadata']['HTTPStatusCode'])
     except timestream.exceptions.RejectedRecordsException as err:
         print("[WARN] Record has been rejected")
         print("RejectedRecords: ", err)
