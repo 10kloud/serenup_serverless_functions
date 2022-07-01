@@ -17,7 +17,7 @@ def build_query(bracelet_id: str, measure_name: str, time_from: str = "1h") -> s
         where bracelet_id='{bracelet_id}' and time > ago({time_from})
         """
     # Specify query for a certain measure since client is not able to know its type
-    elif measure_name == "serendipity":
+    elif measure_name == "serendipity" or measure_name == "battery_level" or measure_name == "balance":
         return f"""
         select time, measure_name, measure_value::double as measure_value
         from "{os.getenv("TIMESTREAM_DB")}"."{os.getenv("TIMESTREAM_TABLE")}"

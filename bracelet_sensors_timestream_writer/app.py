@@ -48,8 +48,14 @@ def save_bracelet_metrics(metrics: List[BraceletMetric]):
             MeasureValue=str(round(metric.battery_level, 2)),
             MeasureValueType="DOUBLE"
         )
+        # User balance
+        balance = dict(
+            MeasureName="balance",
+            MeasureValue=str(round(metric.balance, 2)),
+            MeasureValueType="DOUBLE"
+        )
         records = [
-            serendipity, battery_level
+            serendipity, battery_level, balance
         ]
 
         timestream_write(records, common_attributes)
