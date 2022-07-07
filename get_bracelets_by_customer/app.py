@@ -20,6 +20,11 @@ def lambda_handler(event: dict, context):
     if customer_id is None:
         return dict(
             statusCode=404,
+            headers={
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET"
+            },
             body=json.dumps(dict(
                 message="Customer not found"
             ))
@@ -34,6 +39,11 @@ def lambda_handler(event: dict, context):
 
     return dict(
         statusCode=200,
+        headers={
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET"
+        },
         body=json.dumps(result)
     )
 

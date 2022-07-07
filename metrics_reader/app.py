@@ -65,5 +65,10 @@ def lambda_handler(event: dict, context):
 
     return dict(
         statusCode=200,
+        headers={
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET"
+        },
         body=json.dumps(result)
     )
