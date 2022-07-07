@@ -20,6 +20,9 @@ Parameters:
   TimestreamTableName:
     Type: String
     Description: Name of the timestream db table that stores bracelet data
+  BatteryAnalyticsDynamoTable:
+    Type: String
+    Description: DynamoDB Table name to store analytics results
 
 Resources:
   BraceletSensorsTimestreamWriter:
@@ -36,6 +39,28 @@ Resources:
         Variables:
           TIMESTREAM_DB: !Ref TimestreamDatabase
           TIMESTREAM_TABLE: !Ref TimestreamTableName
+      Events:
+        NewBraceletDataInShard:
+          Type: Kinesis
+          Properties:
+            Stream: !Ref KinesisStream
+            StartingPosition: LATEST
+            MaximumRetryAttempts: 1
+            BatchSize: 100
+            MaximumBatchingWindowInSeconds: 2
+  BraceletMetricsAnalysis:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      CodeUri: bracelet_metric_analysis/
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          BatteryAnalyticsDynamoTable: !Ref BatteryAnalyticsDynamoTable
+      Policies:
+        - AmazonDynamoDBFullAccess
       Events:
         NewBraceletDataInShard:
           Type: Kinesis
