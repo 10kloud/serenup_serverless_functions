@@ -8,7 +8,6 @@ import boto3
 from bracelet import BraceletMetric
 
 timestream = boto3.client('timestream-write')
-dynamodb = boto3.client('dynamodb')
 
 
 def extract_bracelet_metrics(event: Dict[str, List]) -> List[BraceletMetric]:
