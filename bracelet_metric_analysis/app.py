@@ -25,16 +25,17 @@ def extract_bracelet_metrics(event: Dict[str, List]) -> List[BraceletMetric]:
 
 
 def lambda_handler(event, context):
+    print("Parsing bracelet metrics...")
     bracelet_metrics: List[BraceletMetric] = extract_bracelet_metrics(event)
     print("Parsed bracelet metrics")
-    print("Analyzing bracelet metrics...")
+    print(f"Analyzing {len(bracelet_metrics)} bracelet metrics...")
     analysis_results: List[MetricAnalysisResult] = [
         MetricsAnalyzer.analyze(m)
         for m in bracelet_metrics
     ]
     print("Analyzed bracelet metrics")
     print("Saving results in DynamoDB")
-    writer = AnalyticsResultWriter(os.getenv("BatteryAnalyticsDynamoTable"))
+    writer = AnalyticsResultWriter('battery', os.getenv("BatteryAnalyticsDynamoTable"))
     for ar in analysis_results:
-        print(writer.update_result(ar))
+        print(writer.update_battery(ar))
     print("Saved results in DynamoDB")
