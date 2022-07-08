@@ -1,4 +1,5 @@
 .aws-sam
+.sam-params
 .idea
 samconfig.toml
 template.yaml.bak
