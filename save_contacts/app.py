@@ -9,8 +9,8 @@ from boto_tools.sns import SNSTopicManager
 from boto_tools.dynamo import DynamoDBTable
 
 contacts_category_mapping = {
-    "trusted_contact": os.getenv('UserTrustedContactsTableName'),
-    "notifications": os.getenv('UserContactTable')
+    "trusted_contact": os.getenv('UserTrustedContactsTable'),
+    "notifications": os.getenv('UserContactsTable')
 }
 
 

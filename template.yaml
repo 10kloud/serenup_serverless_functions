@@ -29,6 +29,12 @@ Parameters:
   BatteryAnalyticsDynamoTable:
     Type: String
     Description: DynamoDB Table name to store analytics results
+  UserContactsTable:
+    Type: String
+    Description: DynamoDB Table name for users contact information
+  UserTrustedContactsTable:
+    Type: String
+    Description: DynamoDB Table name for users trusted contacts contact information
 
 Resources:
   # Shared components and models
@@ -126,35 +132,14 @@ Resources:
         - AmazonDynamoDBFullAccess
       Environment:
         Variables:
-          UserTrustedContactsTableName: !Ref UserTrustedContactsTableName
-          UserContactTable: !Ref UserContactTable
+          UserContactsTable: !Ref UserContactsTable
+          UserTrustedContactsTable: !Ref UserTrustedContactsTable
       Events:
         SaveContactsForUser:
           Type: Api
           Properties:
             Method: POST
             Path: /users/{customer_id}/contacts
-
-  UserTrustedContactsTableName:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      BillingMode: PAY_PER_REQUEST
-      AttributeDefinitions:
-        - AttributeName: customer_id
-          AttributeType: S
-      KeySchema:
-        - AttributeName: customer_id
-          KeyType: HASH
-  UserContactTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      BillingMode: PAY_PER_REQUEST
-      AttributeDefinitions:
-        - AttributeName: customer_id
-          AttributeType: S
-      KeySchema:
-        - AttributeName: customer_id
-          KeyType: HASH
 
 Outputs:
   BraceletSensorsTimestreamWriter:
