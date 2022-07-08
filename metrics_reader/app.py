@@ -1,9 +1,8 @@
-import json
 import os
 
 import boto3
 
-from responses import bracelet_not_found
+from responses import Ok
 from timestream_querier import TimestreamQuerier
 
 timestream = boto3.client('timestream-query')
@@ -49,26 +48,27 @@ def build_query(database_name: str, table_name: str, bracelet_id: str, measure_n
 
 def lambda_handler(event: dict, context):
     bracelet_id = event.get("pathParameters", {}).get("bracelet_id", None)
-    if bracelet_id is None:
-        return bracelet_not_found(bracelet_id)
+    print("Requested metrics for bracelet", bracelet_id)
 
     query_string_parameters = event.get("queryStringParameters", dict())
     if query_string_parameters is None:
+        print("No query string params found. Using defaults")
         query_string_parameters = dict()
 
     metric = query_string_parameters.get("metric", "")
     time_from = query_string_parameters.get("from", "1d")
 
-    query = build_query(os.getenv("TIMESTREAM_DB"), os.getenv("TIMESTREAM_TABLE"), bracelet_id, metric, time_from)
+    query = build_query(
+        os.getenv("TIMESTREAM_DB"),
+        os.getenv("TIMESTREAM_TABLE"),
+        bracelet_id,
+        metric,
+        time_from
+    )
+    print("Start querying database")
     querier = TimestreamQuerier(timestream)
     result = querier.exec(query)
+    print("Got result")
+    print("Result type", type(result))
 
-    return dict(
-        statusCode=200,
-        headers={
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET"
-        },
-        body=json.dumps(result)
-    )
+    return Ok(body=result[0])

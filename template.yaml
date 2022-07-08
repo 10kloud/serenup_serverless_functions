@@ -9,11 +9,12 @@ Description: >
 Globals:
   Function:
     Timeout: 3
-  Api:
-    Cors:
-      AllowMethods: "'GET, OPTIONS'"
-      AllowHeaders: "'*'"
-      AllowOrigin: "'*'"
+    Handler: app.lambda_handler
+    Runtime: python3.9
+    Architectures:
+      - x86_64
+    Layers:
+      - !Ref SharedLayer
 
 Parameters:
   KinesisStream:
@@ -30,14 +31,21 @@ Parameters:
     Description: DynamoDB Table name to store analytics results
 
 Resources:
+  # Shared components and models
+  SharedLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: shared
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: python3.9
+      BuildArchitecture: x86_64
+
   BraceletSensorsTimestreamWriter:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: app.lambda_handler
-      Runtime: python3.9
       CodeUri: bracelet_sensors_timestream_writer/
-      Architectures:
-        - x86_64
       Policies:
         - AmazonTimestreamFullAccess
       Environment:
@@ -56,11 +64,7 @@ Resources:
   BraceletMetricsAnalysis:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: app.lambda_handler
-      Runtime: python3.9
       CodeUri: bracelet_metric_analysis/
-      Architectures:
-        - x86_64
       Environment:
         Variables:
           BatteryAnalyticsDynamoTable: !Ref BatteryAnalyticsDynamoTable
@@ -79,8 +83,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: metrics_reader/
-      Handler: app.lambda_handler
-      Runtime: python3.9
       Policies:
         - AmazonTimestreamFullAccess
       Environment:
@@ -104,8 +106,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: get_bracelets_by_customer/
-      Handler: app.lambda_handler
-      Runtime: python3.9
       Policies:
         - AmazonTimestreamFullAccess
       Environment:

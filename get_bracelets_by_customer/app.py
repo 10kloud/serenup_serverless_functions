@@ -1,6 +1,9 @@
-import boto3
 import json
 import os
+
+import boto3
+
+from responses import Ok
 from tsquery import TimestreamQuery
 
 timestream = boto3.client('timestream-query')
@@ -16,34 +19,12 @@ where customer_id='{customer_id}'
 
 def lambda_handler(event: dict, context):
     customer_id = event.get("pathParameters", {}).get("customer_id", None)
-
-    if customer_id is None:
-        return dict(
-            statusCode=404,
-            headers={
-                "Access-Control-Allow-Headers": "Content-Type",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET"
-            },
-            body=json.dumps(dict(
-                message="Customer not found"
-            ))
-        )
-
     print(f"Requested bracelets owned by {customer_id}")
 
     query = build_query(customer_id)
-
     tsquery = TimestreamQuery(timestream)
+    print("Start querying the database")
     result = tsquery.run_query(query)
+    print("Got query result")
 
-    return dict(
-        statusCode=200,
-        headers={
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET"
-        },
-        body=json.dumps(result)
-    )
-
+    return Ok(body=result[0])
