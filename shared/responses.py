@@ -18,3 +18,8 @@ class Response(dict):
 class Ok(Response):
     def __init__(self, headers: Dict[str, str] = {}, body: Union[str, dict] = "OK"):
         super().__init__(200, headers, body)
+
+
+class BadRequest(Response):
+    def __init__(self, headers: Dict[str, str] = {}, body: Union[str, dict] = "Bad Request"):
+        super().__init__(400, headers, body)

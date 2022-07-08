@@ -1,0 +1,115 @@
+{
+  "resource": "/users/{customer_id}/contacts",
+  "path": "/users/customer_id/contacts",
+  "httpMethod": "POST",
+  "headers": {
+    "Accept": "*/*",
+    "CloudFront-Forwarded-Proto": "https",
+    "CloudFront-Is-Desktop-Viewer": "true",
+    "CloudFront-Is-Mobile-Viewer": "false",
+    "CloudFront-Is-SmartTV-Viewer": "false",
+    "CloudFront-Is-Tablet-Viewer": "false",
+    "CloudFront-Viewer-ASN": "44831",
+    "CloudFront-Viewer-Country": "IT",
+    "content-type": "application/json",
+    "Host": "apiid.execute-api.eu-west-1.amazonaws.com",
+    "User-Agent": "insomnia/2022.4.2",
+    "Via": "2.0 boh.cloudfront.net (CloudFront)",
+    "X-Amz-Cf-Id": "boh-Tboh-boh==",
+    "X-Amzn-Trace-Id": "Root=1-boh-boh",
+    "X-Forwarded-For": "0.0.0.0",
+    "X-Forwarded-Port": "443",
+    "X-Forwarded-Proto": "https"
+  },
+  "multiValueHeaders": {
+    "Accept": [
+      "*/*"
+    ],
+    "CloudFront-Forwarded-Proto": [
+      "https"
+    ],
+    "CloudFront-Is-Desktop-Viewer": [
+      "true"
+    ],
+    "CloudFront-Is-Mobile-Viewer": [
+      "false"
+    ],
+    "CloudFront-Is-SmartTV-Viewer": [
+      "false"
+    ],
+    "CloudFront-Is-Tablet-Viewer": [
+      "false"
+    ],
+    "CloudFront-Viewer-ASN": [
+      "44831"
+    ],
+    "CloudFront-Viewer-Country": [
+      "IT"
+    ],
+    "content-type": [
+      "application/json"
+    ],
+    "Host": [
+      "apiid.execute-api.eu-west-1.amazonaws.com"
+    ],
+    "User-Agent": [
+      "insomnia/2022.4.2"
+    ],
+    "Via": [
+      "2.0 boh.cloudfront.net (CloudFront)"
+    ],
+    "X-Amz-Cf-Id": [
+      "cf-id"
+    ],
+    "X-Amzn-Trace-Id": [
+      "trace-id"
+    ],
+    "X-Forwarded-For": [
+      "185.122.225.105, 130.176.221.114"
+    ],
+    "X-Forwarded-Port": [
+      "443"
+    ],
+    "X-Forwarded-Proto": [
+      "https"
+    ]
+  },
+  "queryStringParameters": null,
+  "multiValueQueryStringParameters": null,
+  "pathParameters": {
+    "customer_id": "customer_id"
+  },
+  "stageVariables": null,
+  "requestContext": {
+    "resourceId": "resource_id",
+    "resourcePath": "/users/{customer_id}/contacts",
+    "httpMethod": "POST",
+    "extendedRequestId": "U5yPRFKKjoEF6_w=",
+    "requestTime": "07/Jul/2022:15:36:52 +0000",
+    "path": "/Prod/users/customer_id/contacts",
+    "accountId": "0123456789",
+    "protocol": "HTTP/1.1",
+    "stage": "Prod",
+    "domainPrefix": "api",
+    "requestTimeEpoch": 1657208212795,
+    "requestId": "72f2f633-d0c3-49ab-8eec-5db7f52b3c0e",
+    "identity": {
+      "cognitoIdentityPoolId": null,
+      "accountId": null,
+      "cognitoIdentityId": null,
+      "caller": null,
+      "sourceIp": "0.0.0.0",
+      "principalOrgId": null,
+      "accessKey": null,
+      "cognitoAuthenticationType": null,
+      "cognitoAuthenticationProvider": null,
+      "userArn": null,
+      "userAgent": "insomnia/2022.4.2",
+      "user": null
+    },
+    "domainName": "api.endpoint.domain",
+    "apiId": "apiID"
+  },
+  "body": "{ \"endpoint\": \"your.email@example.com\", \"protocol\": \"email\", \"category\": \"trusted_contact\" }",
+  "isBase64Encoded": false
+}

@@ -118,6 +118,43 @@ Resources:
           Properties:
             Method: GET
             Path: /users/{customer_id}/bracelets
+  SaveContacts:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: save_contacts/
+      Policies:
+        - AmazonDynamoDBFullAccess
+      Environment:
+        Variables:
+          UserTrustedContactsTableName: !Ref UserTrustedContactsTableName
+          UserContactTable: !Ref UserContactTable
+      Events:
+        SaveContactsForUser:
+          Type: Api
+          Properties:
+            Method: POST
+            Path: /users/{customer_id}/contacts
+
+  UserTrustedContactsTableName:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: customer_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: customer_id
+          KeyType: HASH
+  UserContactTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: customer_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: customer_id
+          KeyType: HASH
 
 Outputs:
   BraceletSensorsTimestreamWriter:
