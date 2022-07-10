@@ -26,15 +26,9 @@ Parameters:
   TimestreamTableName:
     Type: String
     Description: Name of the timestream db table that stores bracelet data
-  BatteryAnalyticsDynamoTable:
+  NotificationTopicPrefix:
     Type: String
-    Description: DynamoDB Table name to store analytics results
-  UserContactsTable:
-    Type: String
-    Description: DynamoDB Table name for users contact information
-  UserTrustedContactsTable:
-    Type: String
-    Description: DynamoDB Table name for users trusted contacts contact information
+    Description: Prefix of all SNS Topics
 
 Resources:
   # Shared components and models
@@ -73,7 +67,7 @@ Resources:
       CodeUri: bracelet_metric_analysis/
       Environment:
         Variables:
-          BatteryAnalyticsDynamoTable: !Ref BatteryAnalyticsDynamoTable
+          BatteryAnalyticsDynamoTable: !Ref DeviceBatteryStatus
       Policies:
         - AmazonDynamoDBFullAccess
       Events:
@@ -83,8 +77,8 @@ Resources:
             Stream: !Ref KinesisStream
             StartingPosition: LATEST
             MaximumRetryAttempts: 1
-            BatchSize: 100
-            MaximumBatchingWindowInSeconds: 2
+            BatchSize: 10
+            MaximumBatchingWindowInSeconds: 1
   MetricsAPI:
     Type: AWS::Serverless::Function
     Properties:
@@ -134,12 +128,71 @@ Resources:
         Variables:
           UserContactsTable: !Ref UserContactsTable
           UserTrustedContactsTable: !Ref UserTrustedContactsTable
+          NotificationTopicPrefix: !Ref NotificationTopicPrefix
       Events:
         SaveContactsForUser:
           Type: Api
           Properties:
             Method: POST
             Path: /users/{customer_id}/contacts
+
+  LowBatteryNotifier:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: low_battery_notifier/
+      Policies:
+        - AmazonTimestreamFullAccess
+        - AmazonDynamoDBFullAccess
+        - AmazonSNSFullAccess
+      Environment:
+        Variables:
+          UserContactsTable: !Ref UserContactsTable
+          TimestreamDatabase: !Ref TimestreamDatabase
+          TimestreamTable: !Ref TimestreamTableName
+      Events:
+        Stream:
+          Type: DynamoDB
+          Properties:
+            Stream: !GetAtt DeviceBatteryStatus.StreamArn
+            BatchSize: 1
+            StartingPosition: LATEST
+
+
+  # Store user contact info
+  UserContactsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: customer_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: customer_id
+          KeyType: HASH
+  # Store users trusted contacts, contacts info
+  UserTrustedContactsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: customer_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: customer_id
+          KeyType: HASH
+  # Store battery status that acts like a Notification state
+  DeviceBatteryStatus:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: device_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: device_id
+          KeyType: HASH
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
 
 Outputs:
   BraceletSensorsTimestreamWriter:

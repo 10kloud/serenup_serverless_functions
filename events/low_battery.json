@@ -1,0 +1,39 @@
+{
+  "Records": [
+    {
+      "eventID": "4075541be2b719c0b2e793500f82cb74",
+      "eventName": "MODIFY",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "eu-west-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1657311332.0,
+        "Keys": {
+          "device_id": {
+            "S": "device-id"
+          }
+        },
+        "NewImage": {
+          "device_id": {
+            "S": "device-id"
+          },
+          "battery": {
+            "S": "LOW_BATTERY"
+          }
+        },
+        "OldImage": {
+          "device_id": {
+            "S": "device-id"
+          },
+          "battery": {
+            "S": "CHARGE"
+          }
+        },
+        "SequenceNumber": "300000000008198244070",
+        "SizeBytes": 166,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "event-source-arn"
+    }
+  ]
+}

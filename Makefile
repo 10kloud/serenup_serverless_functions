@@ -5,4 +5,4 @@ build:
 	@sam build --use-container
 
 deploy: build
-	@sam deploy --parameter-overrides $(shell cat .sam-params)
+	@sam deploy --no-confirm-changeset --parameter-overrides $(shell cat .sam-params)

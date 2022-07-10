@@ -1,5 +1,3 @@
-from typing import Union
-
 import boto3
 from botocore.exceptions import ClientError
 from mypy_boto3_dynamodb.service_resource import DynamoDBServiceResource
@@ -36,5 +34,4 @@ class DynamoDBTable:
             )
             raise
         else:
-            return response['Item']
-
+            return response
