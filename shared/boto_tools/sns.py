@@ -4,7 +4,7 @@ import boto3
 from botocore.exceptions import ClientError
 from mypy_boto3_sns.client import SNSClient
 from mypy_boto3_sns.service_resource import SNSServiceResource, Topic, Subscription
-from mypy_boto3_sns.type_defs import ListSubscriptionsByTopicResponseTypeDef
+from mypy_boto3_sns.type_defs import SubscriptionTypeDef
 
 
 class SNSTopicManager:
@@ -36,6 +36,19 @@ class SNSTopicManager:
             print("Contact subscribed successfully")
             return subscription
 
+    def unsubscribe(self, subscription_arn: str):
+        try:
+            response = self.__client.unsubscribe(
+                SubscriptionArn=subscription_arn
+            )
+        except ClientError as err:
+            print("Unable to delete subscription", subscription_arn)
+            print(
+                err.response['Error']['Code'],
+                err.response['Error']['Message']
+            )
+            raise
+
     def publish(self, message: str):
         try:
             response = self.__topic.publish(
@@ -52,7 +65,13 @@ class SNSTopicManager:
         else:
             return response['MessageId']
 
-    def list_subscriptions(self) -> List:
+    def find_subscription_by_endpoint(self, endpoint: str) -> dict:
+        for subscription in self.list_subscriptions():
+            if subscription["Endpoint"] == endpoint:
+                return subscription
+        return {}
+
+    def list_subscriptions(self) -> List[SubscriptionTypeDef]:
         paginator = self.__client.get_paginator('list_subscriptions_by_topic')
         response_iterator = paginator.paginate(
             TopicArn=self.__topic.arn,

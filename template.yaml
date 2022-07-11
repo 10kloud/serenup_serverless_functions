@@ -159,6 +159,27 @@ Resources:
               - method.request.querystring.category:
                   Required: false
                   Caching: false
+  # Get user contacts
+  DeleteContact:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: delete_contacts/
+      Policies:
+        - AmazonDynamoDBFullAccess
+      Environment:
+        Variables:
+          UserContactsTable: !Ref UserContactsTable
+          UserTrustedContactsTable: !Ref UserTrustedContactsTable
+      Events:
+        SaveContactsForUser:
+          Type: Api
+          Properties:
+            Method: DELETE
+            Path: /users/{customer_id}/contacts
+            RequestParameters:
+              - method.request.querystring.category:
+                  Required: false
+                  Caching: false
 
   LowBatteryNotifier:
     Type: AWS::Serverless::Function

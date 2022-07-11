@@ -23,3 +23,13 @@ class Ok(Response):
 class BadRequest(Response):
     def __init__(self, headers: Dict[str, str] = {}, body: Union[str, dict, List] = "Bad Request"):
         super().__init__(400, headers, body)
+
+
+class ResourceNotFound(Response):
+    def __init__(self, headers: Dict[str, str] = {}, body: Union[str, dict, List] = "Resource not found"):
+        super().__init__(404, headers, body)
+
+
+class Gone(Response):
+    def __init__(self, headers: Dict[str, str] = {}, body: Union[str, dict, List] = "Gone"):
+        super().__init__(410, headers, body)
