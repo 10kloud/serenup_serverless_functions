@@ -1,5 +1,5 @@
 import json
-from typing import Union, Dict
+from typing import Union, Dict, List
 
 default_headers: Dict[str, str] = {
     "Access-Control-Allow-Origin": "*",
@@ -7,7 +7,7 @@ default_headers: Dict[str, str] = {
 
 
 class Response(dict):
-    def __init__(self, status_code: int, headers: Dict[str, str], body: Union[str, dict]):
+    def __init__(self, status_code: int, headers: Dict[str, str], body: Union[str, dict, List]):
         dict.__init__(self,
                       statusCode=status_code,
                       headers=default_headers | headers,
@@ -16,10 +16,10 @@ class Response(dict):
 
 
 class Ok(Response):
-    def __init__(self, headers: Dict[str, str] = {}, body: Union[str, dict] = "OK"):
+    def __init__(self, headers: Dict[str, str] = {}, body: Union[str, dict, List] = "OK"):
         super().__init__(200, headers, body)
 
 
 class BadRequest(Response):
-    def __init__(self, headers: Dict[str, str] = {}, body: Union[str, dict] = "Bad Request"):
+    def __init__(self, headers: Dict[str, str] = {}, body: Union[str, dict, List] = "Bad Request"):
         super().__init__(400, headers, body)

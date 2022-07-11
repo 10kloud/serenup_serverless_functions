@@ -1,11 +1,15 @@
+from typing import List
+
 import boto3
 from botocore.exceptions import ClientError
-
+from mypy_boto3_sns.client import SNSClient
 from mypy_boto3_sns.service_resource import SNSServiceResource, Topic, Subscription
+from mypy_boto3_sns.type_defs import ListSubscriptionsByTopicResponseTypeDef
 
 
 class SNSTopicManager:
     def __init__(self, topic_name: str):
+        self.__client: SNSClient = boto3.client('sns')
         self.__resource: SNSServiceResource = boto3.resource('sns')
         print(f"Gathering or creating topic {topic_name}")
         self.__topic: Topic = self.__resource.create_topic(
@@ -47,3 +51,14 @@ class SNSTopicManager:
             raise
         else:
             return response['MessageId']
+
+    def list_subscriptions(self) -> List:
+        paginator = self.__client.get_paginator('list_subscriptions_by_topic')
+        response_iterator = paginator.paginate(
+            TopicArn=self.__topic.arn,
+        )
+
+        for response in response_iterator:
+            subscriptions = response['Subscriptions']
+            for subscription in subscriptions:
+                yield subscription

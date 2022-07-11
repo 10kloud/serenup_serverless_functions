@@ -118,6 +118,8 @@ Resources:
           Properties:
             Method: GET
             Path: /users/{customer_id}/bracelets
+
+  # Add a new user contact or a trusted contact
   SaveContacts:
     Type: AWS::Serverless::Function
     Properties:
@@ -135,6 +137,28 @@ Resources:
           Properties:
             Method: POST
             Path: /users/{customer_id}/contacts
+  # Get user contacts
+  GetContacts:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: get_contacts/
+      Policies:
+        - AmazonDynamoDBFullAccess
+      Environment:
+        Variables:
+          UserContactsTable: !Ref UserContactsTable
+          UserTrustedContactsTable: !Ref UserTrustedContactsTable
+          NotificationTopicPrefix: !Ref NotificationTopicPrefix
+      Events:
+        SaveContactsForUser:
+          Type: Api
+          Properties:
+            Method: GET
+            Path: /users/{customer_id}/contacts
+            RequestParameters:
+              - method.request.querystring.category:
+                  Required: false
+                  Caching: false
 
   LowBatteryNotifier:
     Type: AWS::Serverless::Function
