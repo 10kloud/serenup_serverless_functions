@@ -34,4 +34,4 @@ class DynamoDBTable:
             )
             raise
         else:
-            return response
+            return response.get('Item', {})

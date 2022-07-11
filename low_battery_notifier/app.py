@@ -14,16 +14,19 @@ def get_bracelet_owner(bracelet_id: str) -> str:
     )
     querier = TimestreamQuerier()
     result = querier.exec(query)
-
-    return result[0]['data'][0]['customer_id']
+    result_data = result[0]['data']
+    if len(result_data) == 0:
+        return ""
+    return result_data[0]['customer_id']
 
 
 def get_owner_notification_topic_name(owner_id: str) -> str:
-    return DynamoDBTable(
+    response = DynamoDBTable(
         table_name=os.getenv('UserContactsTable')
     ).get(key={
         'customer_id': owner_id
-    }).get('Item', {}).get('sns_topic_name', None)
+    })
+    return response.get('sns_topic_name', None)
 
 
 def lambda_handler(event: dict, context):
@@ -42,6 +45,10 @@ def lambda_handler(event: dict, context):
     if old_image.battery_status == "CHARGE" and new_image.battery_status == "LOW_BATTERY":
         owner_id = get_bracelet_owner(new_image.device_id)
         owner_notification_topic = get_owner_notification_topic_name(owner_id)
+        if owner_notification_topic is None:
+            print("Unable to query the SNS topic for", owner_id)
+            return
+
         print("Sending low battery alert to the owner of the bracelet", new_image.device_id)
         SNSTopicManager(owner_notification_topic).publish(
             message="Il tuo bracciale SerenUp ha la batteria scarica. Assicurati di caricarlo il prima possibile."
