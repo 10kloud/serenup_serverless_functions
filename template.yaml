@@ -61,24 +61,6 @@ Resources:
             MaximumRetryAttempts: 1
             BatchSize: 100
             MaximumBatchingWindowInSeconds: 2
-  BraceletMetricsAnalysis:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: bracelet_metric_analysis/
-      Environment:
-        Variables:
-          BatteryAnalyticsDynamoTable: !Ref DeviceBatteryStatus
-      Policies:
-        - AmazonDynamoDBFullAccess
-      Events:
-        NewBraceletDataInShard:
-          Type: Kinesis
-          Properties:
-            Stream: !Ref KinesisStream
-            StartingPosition: LATEST
-            MaximumRetryAttempts: 1
-            BatchSize: 10
-            MaximumBatchingWindowInSeconds: 1
   MetricsAPI:
     Type: AWS::Serverless::Function
     Properties:
@@ -181,6 +163,24 @@ Resources:
                   Required: false
                   Caching: false
 
+  BatteryAnalyzer:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: battery_analyzer/
+      Environment:
+        Variables:
+          BatteryAnalyticsDynamoTable: !Ref DeviceBatteryStatus
+      Policies:
+        - AmazonDynamoDBFullAccess
+      Events:
+        NewBraceletDataInShard:
+          Type: Kinesis
+          Properties:
+            Stream: !Ref KinesisStream
+            StartingPosition: LATEST
+            MaximumRetryAttempts: 1
+            BatchSize: 10
+            MaximumBatchingWindowInSeconds: 1
   LowBatteryNotifier:
     Type: AWS::Serverless::Function
     Properties:
