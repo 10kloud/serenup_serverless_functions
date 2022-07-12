@@ -5,8 +5,7 @@ from botocore.exceptions import ClientError
 
 from contact import Contact
 from responses import Ok, BadRequest
-from boto_tools.sns import SNSTopicManager
-from boto_tools.dynamo import DynamoDBTable
+from boto_tools import SNSTopicManager, DynamoDBTable
 
 contacts_category_mapping = {
     "trusted_contact": os.getenv('UserTrustedContactsTable'),

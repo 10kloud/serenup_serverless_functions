@@ -1,9 +1,7 @@
 import os
 
 from battery_status_image import BatteryStatusImage
-from boto_tools.dynamo import DynamoDBTable
-from boto_tools.timestream import TimestreamQuerier
-from boto_tools.sns import SNSTopicManager
+from boto_tools import DynamoDBTable, TimestreamQuerier, SNSTopicManager
 
 
 def get_bracelet_owner(bracelet_id: str) -> str:

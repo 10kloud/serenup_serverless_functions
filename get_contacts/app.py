@@ -2,8 +2,7 @@ import os
 
 from botocore.exceptions import ClientError
 
-from boto_tools.dynamo import DynamoDBTable
-from boto_tools.sns import SNSTopicManager
+from boto_tools import DynamoDBTable, SNSTopicManager
 from responses import Ok, BadRequest
 
 contacts_category_mapping = {
