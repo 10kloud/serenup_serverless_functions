@@ -16,6 +16,10 @@ class BraceletMetric:
     def battery_status(self) -> str:
         return "CHARGE" if self.battery_level > 20 else "LOW_BATTERY"
 
+    @property
+    def balance_status(self):
+        return "OK" if self.balance > -1 else "FALL"
+
     @classmethod
     def from_dict(cls, bracelet_data: dict):
         return cls(

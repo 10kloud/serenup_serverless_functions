@@ -8,7 +8,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 5
     Handler: app.lambda_handler
     Runtime: python3.9
     Architectures:
@@ -29,6 +29,9 @@ Parameters:
   NotificationTopicPrefix:
     Type: String
     Description: Prefix of all SNS Topics
+  CognitoUserPoolID:
+    Type: String
+    Description: ID of the cognito user pool
 
 Resources:
   # Shared components and models
@@ -163,6 +166,61 @@ Resources:
                   Required: false
                   Caching: false
 
+  # Analyze user balance and report to a dynamoDB table
+  BalanceAnalyzer:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: balance_analyzer/
+      Environment:
+        Variables:
+          BalanceAnalyticsDynamoTable: !Ref DeviceBalanceStatus
+      Policies:
+        - AmazonDynamoDBFullAccess
+      Events:
+        NewBraceletDataInShard:
+          Type: Kinesis
+          Properties:
+            Stream: !Ref KinesisStream
+            StartingPosition: LATEST
+            MaximumRetryAttempts: 1
+            BatchSize: 10
+            MaximumBatchingWindowInSeconds: 1
+  # Store battery status that acts like a Notification state
+  DeviceBalanceStatus:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: device_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: device_id
+          KeyType: HASH
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+  LowBalanceNotifier:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: low_balance_notifier/
+      Policies:
+        - AmazonTimestreamFullAccess
+        - AmazonDynamoDBFullAccess
+        - AmazonSNSFullAccess
+        - AmazonCognitoReadOnly
+      Environment:
+        Variables:
+          UserTrustedContactsTable: !Ref UserTrustedContactsTable
+          TimestreamDatabase: !Ref TimestreamDatabase
+          TimestreamTable: !Ref TimestreamTableName
+          CognitoUserPoolID: !Ref CognitoUserPoolID
+      Events:
+        Stream:
+          Type: DynamoDB
+          Properties:
+            Stream: !GetAtt DeviceBalanceStatus.StreamArn
+            BatchSize: 1
+            StartingPosition: LATEST
+
   BatteryAnalyzer:
     Type: AWS::Serverless::Function
     Properties:
@@ -201,6 +259,19 @@ Resources:
             Stream: !GetAtt DeviceBatteryStatus.StreamArn
             BatchSize: 1
             StartingPosition: LATEST
+  # Store battery status that acts like a Notification state
+  DeviceBatteryStatus:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: device_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: device_id
+          KeyType: HASH
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
 
 
   # Store user contact info
@@ -225,19 +296,6 @@ Resources:
       KeySchema:
         - AttributeName: customer_id
           KeyType: HASH
-  # Store battery status that acts like a Notification state
-  DeviceBatteryStatus:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      BillingMode: PAY_PER_REQUEST
-      AttributeDefinitions:
-        - AttributeName: device_id
-          AttributeType: S
-      KeySchema:
-        - AttributeName: device_id
-          KeyType: HASH
-      StreamSpecification:
-        StreamViewType: NEW_AND_OLD_IMAGES
 
 Outputs:
   BraceletSensorsTimestreamWriter:

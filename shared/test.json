@@ -1,0 +1,55 @@
+{
+  "Users": [
+    {
+      "Username": "mattia",
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "ed349f9e-c5f9-4288-8cd0-ef4247d3a158"
+        },
+        {
+          "Name": "email_verified",
+          "Value": "true"
+        },
+        {
+          "Name": "name",
+          "Value": "Mattia Ceschin"
+        },
+        {
+          "Name": "email",
+          "Value": "mattia.ceschin@gmail.com"
+        }
+      ],
+      "UserCreateDate": datetime.datetime(2022,
+      7,
+      1,
+      15,
+      20,
+      3,
+      949000,
+      tzinfo=tzlocal()),
+      "UserLastModifiedDate": datetime.datetime(2022,
+      7,
+      12,
+      15,
+      53,
+      8,
+      229000,
+      tzinfo=tzlocal()),
+      "Enabled": True,
+      "UserStatus": "CONFIRMED"
+    }
+  ],
+  "ResponseMetadata": {
+    "RequestId": "8e969b66-a08d-4306-bc9e-d7405910decd",
+    "HTTPStatusCode": 200,
+    "HTTPHeaders": {
+      "date": "Tue, 12 Jul 2022 15:56:16 GMT",
+      "content-type": "application/x-amz-json-1.1",
+      "content-length": "358",
+      "connection": "keep-alive",
+      "x-amzn-requestid": "8e969b66-a08d-4306-bc9e-d7405910decd"
+    },
+    "RetryAttempts": 0
+  }
+}

@@ -1,7 +1,7 @@
 import os
 
-from boto_tools import DynamoDBTable, TimestreamQuerier, SNSTopicManager
-from battery_status_image import BatteryStatusImage
+from boto_tools import DynamoDBTable, TimestreamQuerier, SNSTopicManager, CognitoIDPUserPool
+from balance_image import BalanceState
 
 
 def get_bracelet_owner(bracelet_id: str) -> str:
@@ -20,7 +20,7 @@ def get_bracelet_owner(bracelet_id: str) -> str:
 
 def get_owner_notification_topic_name(owner_id: str) -> str:
     response = DynamoDBTable(
-        table_name=os.getenv('UserContactsTable')
+        table_name=os.getenv('UserTrustedContactsTable')
     ).get(key={
         'customer_id': owner_id
     })
@@ -31,25 +31,33 @@ def lambda_handler(event: dict, context):
     if event['Records'][0]['eventName'] != "MODIFY":
         print("Ignoring event of type", event['Records'][0]['eventName'])
         return
-
-    old_image = BatteryStatusImage.from_dynamodb_event_image(
+    old_state = BalanceState.from_dynamodb_event_image(
         event['Records'][0]['dynamodb']['OldImage']
     )
-    new_image = BatteryStatusImage.from_dynamodb_event_image(
+    new_state = BalanceState.from_dynamodb_event_image(
         event['Records'][0]['dynamodb']['NewImage']
     )
-    print(f"Received Old={old_image.battery_status} New={new_image.battery_status}")
+    print(f"Received Old={old_state.balance_status} New={new_state.balance_status}")
 
-    if old_image.battery_status == "CHARGE" and new_image.battery_status == "LOW_BATTERY":
-        owner_id = get_bracelet_owner(new_image.device_id)
+    if old_state.balance_status == "OK" and new_state.balance_status == "FALL":
+        owner_id = get_bracelet_owner(new_state.device_id)
         owner_notification_topic = get_owner_notification_topic_name(owner_id)
+
         if owner_notification_topic is None:
             print("Unable to query the SNS topic for", owner_id)
             return
 
-        print("Sending low battery alert to the owner of the bracelet", new_image.device_id)
-        SNSTopicManager(owner_notification_topic).publish(
-            message="Il tuo bracciale SerenUp ha la batteria scarica. Assicurati di caricarlo il prima possibile."
+        print("Retrieving user name from AWS Cognito")
+        user_info = CognitoIDPUserPool(
+            user_pool_id=os.getenv("CognitoUserPoolID")
+        ).filter_user_by_sub(owner_id)['Users'][0]
+        user_name = next(item for item in user_info['Attributes'] if item['Name'] == "name")['Value']
+        print("User name found")
+
+        print("Sending low battery alert to the trusted contacts of the owner of the bracelet", new_state.device_id)
+        response = SNSTopicManager(owner_notification_topic).publish(
+            message=f"{user_name} è caduto."
         )
+        print(response)
     else:
         print("Skipping notification")
