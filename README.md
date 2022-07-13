@@ -19,6 +19,12 @@ Currently, only 2 categories have been implemented:
 
 ![Notification](./docs/notifications.png)
 
+## Analysis
+Incoming data is analyzed as soon as they are dispatched from Kinesis Data Stream and it's composed by 3 jobs:
+- DataWarehousePipeline: Kinesis Firehose is a service managed by AWS that accomplish the task of reading the data from a Kinesis Stream and storing in a S3 bucket as JSON object
+- Battery Analyzer: Analyze battery level for every incoming metrics and report a state in the BatteryState table (DynamoDB) 
+- Balance Analyzer: same as Battery Analyzer but for balance
+![Analysis](./docs/analysis.png)
 
 ## API documentation
 AWS API gateway allow to download current API design in OpenAPI 3.0 format:

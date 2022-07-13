@@ -33,6 +33,7 @@ with Diagram("", filename="docs/notifications"):
     battery_state >> Edge(label="Trigger") >> low_battery_notifier
     contacts_table << low_battery_notifier
     low_battery_notifier >> Edge(label="Send message") >> contacts_topic
+    user << contacts_topic
 
     balance_state >> Edge(label="Trigger") >> low_balance_notifier
     trusted_contacts_table << low_balance_notifier
