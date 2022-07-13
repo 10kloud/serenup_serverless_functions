@@ -7,6 +7,7 @@ name = "pypi"
 boto3 = "1.24.20"
 boto3-stubs = {version = "==1.24.20", extras = ["sns", "timestream-query", "dynamodb", "cognito-idp"]}
 requests = "==2.28.1"
+diagrams = "==0.21.1"
 
 [dev-packages]
 
